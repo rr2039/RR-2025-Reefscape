@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public class Robot extends TimedRobot {
   private final XboxController m_controller = new XboxController(0);
   private final Drivetrain m_swerve = new Drivetrain();
-  private SparkMax testMotor = new SparkMax(4, MotorType.kBrushless);
+  //private SparkMax testMotor = new SparkMax(9, MotorType.kBrushless);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -39,8 +39,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    testMotor.set(m_controller.getLeftTriggerAxis());
-    //driveWithJoystick(true);
+    //testMotor.set(m_controller.getLeftTriggerAxis());
+    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
