@@ -38,11 +38,11 @@ public class ElevatorIOSparkMax implements ElevatorIO {
   public ElevatorIOSparkMax() {
     // base config for all motors
     mLeftConfig.idleMode(IdleMode.kBrake).inverted(true).smartCurrentLimit(60);
+    
 
     // Create spesific right motor config from base config
     mRightConfig.apply(mLeftConfig);
     mRightConfig.follow(MechanismConstants.leftElevatorId, true);
-
     m_leftElevator = new SparkMax(MechanismConstants.leftElevatorId, MotorType.kBrushless);
     m_rightElevator = new SparkMax(MechanismConstants.rightElevatorId, MotorType.kBrushless);
 
@@ -69,6 +69,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         mLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_rightElevator.configure(
         mRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    bottomLimitSwitch = m_leftElevator.getReverseLimitSwitch();
   }
 
   @Override

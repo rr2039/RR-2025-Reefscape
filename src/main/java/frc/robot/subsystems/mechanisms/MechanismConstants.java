@@ -3,8 +3,8 @@ package frc.robot.subsystems.mechanisms;
 public class MechanismConstants {
 
   // Motor Constants
-  public static final int leftElevatorId = 3;
-  public static final int rightElevatorId = 4;
+  public static final int leftElevatorId = 9;
+  public static final int rightElevatorId = 10;
 
   public class ElevatorConstants {
     // Gearing constants
