@@ -51,7 +51,8 @@ public class RobotContainer {
   // NJ* private final Elevator elevator;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driver = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -70,9 +71,10 @@ public class RobotContainer {
                 new ModuleIOSparkMaxTalonFX(3));
         vision =
             new Vision(
-                drive::addVisionMeasurement, new VisionIOPhotonVision(camera0Name, robotToCamera0));
-        // NJ*        elevator =
-        // NJ*            new Elevator(new ElevatorIOSparkMax());
+                drive::addVisionMeasurement, new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                drive::addVisionMeasurement, new VisionIOPhotonVision(camera1Name, robotToCamera1));
+                elevator =
+                    new Elevator(new ElevatorIOSparkMax());
         break;
 
       case SIM:
@@ -87,11 +89,12 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
-        // NJ*    elevator =
-        // NJ*        new Elevator(
-        // NJ*           new ElevatorIOSim()
-        // NJ*           );
+                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+              elevator =
+                new Elevator(
+                   new ElevatorIOSim()
+                   );
         break;
 
       default:
@@ -104,11 +107,11 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        // NJ*        elevator =
-        // NJ*            new Elevator(
-        // NJ*                new ElevatorIO() {}
-        // NJ*        );
-        // NJ*  mechanismControl = new MechanismControl(elevator);
+                elevator =
+                    new Elevator(
+                        new ElevatorIO() {}
+                );
+          mechanismControl = new MechanismControl(elevator);
         break;
     }
 
@@ -146,25 +149,25 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -driver.getLeftY(),
+            () -> -driver.getLeftX(),
+            () -> -driver.getRightX()));
 
     // Lock to 0° when A button is held
-    controller
+    driver
         .a()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                () -> -driver.getLeftY(),
+                () -> -driver.getLeftX(),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driver.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    driver
         .b()
         .onTrue(
             Commands.runOnce(
@@ -178,7 +181,7 @@ public class RobotContainer {
     @SuppressWarnings("resource")
     PIDController aimController = new PIDController(0.2, 0.0, 0.0);
     aimController.enableContinuousInput(-Math.PI, Math.PI);
-    controller
+    driver
         .b()
         .whileTrue(
             Commands.startRun(
@@ -190,6 +193,11 @@ public class RobotContainer {
                   vision.getTargetX(0).getRadians();
                 },
                 drive));
+
+    operator.a().onTrue(Commands.runOnce(elevator.requestPosOne()));
+    operator.x().onTrue(Commands.runOnce(elevator.toZeroPosition()));
+    operator.y().onTrue(Commands.runOnce(elevator.requestPosThree()));
+    operator.b().onTrue(Commands.runOnce(elevator.requestPosTwo()));
 
     // NJ*    OIConstants.kAuxController.rightTrigger()
     // NJ*                    .onTrue( Commands.runOnce(() ->

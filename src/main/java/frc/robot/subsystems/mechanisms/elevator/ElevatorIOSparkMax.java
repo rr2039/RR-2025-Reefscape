@@ -102,6 +102,19 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     }
   }
 
+  public void toZeroPosition(){
+    requestElevatorPosition(0)
+  }
+  public void requestPosOne(){
+    requestElevatorPosition(MechanismConstants.levelOne)
+  }
+  public void requestPosTwo(){
+    requestElevatorPosition(MechanismConstants.levelTwo)
+  }
+  public void requestPosThree(){
+    requestElevatorPosition(MechanismConstants.levelThree)
+  }
+
   /**
    * Drive motors in voltage control mode
    *

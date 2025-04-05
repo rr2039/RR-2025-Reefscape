@@ -40,9 +40,9 @@ public class MechanismConstants {
 
     // Elevator Constants
     public static final double maxHeight = 103;
-    public static final double levelOne = 0;
-    public static final double levelTwo = 0;
-    public static final double levelThree = 0;
+    public static final double levelOne = 5;
+    public static final double levelTwo = 10;
+    public static final double levelThree = 15;
     // public final double levelFour = 0;
 
   }

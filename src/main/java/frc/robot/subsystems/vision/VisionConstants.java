@@ -24,17 +24,25 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   // Camera names, must match names configured on coprocessor
-  public static String camera0Name = "Front";
+  public static String camera0Name = "Left";
+  public static String camera1Name = "Right"; 
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
-  public static Transform3d robotToCamera0 = // Front
+  public static Transform3d robotToCamera0 = // Left
       new Transform3d(
-          .3,
-          -0.265,
-          0.23, // 0.23m forward, .265 m right, and 0.23m up
-          new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(29)));
-  // Camera rolled 0 degrees, pitched upwards 15 degrees, and yawed 29 degrees
+          .185,
+          0.19,
+          0.53, // 0.185 m forward, .19 m left, and 0.53 m up
+          new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(346)));
+  // Camera rolled 0 degrees, pitched upwards 15 degrees, and yawed 14 degrees
+  public static Transform3d robotToCamera1 = // Right
+  new Transform3d(
+      .185,
+      -0.17,
+      0.53, // 0.185 m forward, .17 m right, and 0.53 m up
+      new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(17)));
+// Camera rolled 0 degrees, pitched upwards 15 degrees, and yawed 17 degrees
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
